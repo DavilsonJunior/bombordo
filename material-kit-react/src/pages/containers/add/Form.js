@@ -79,7 +79,11 @@ export const ContainerForm = (props) => {
       enqueueSnackbar('Container cadastrado com sucesso!', { variant: 'success' });
       route.push('/containers');
     } catch(err) {
-      enqueueSnackbar('Falha ao cadastrar o container',  { variant: 'error' });
+      let message = 'Falha ao cadastrar o container';
+      if (err.response?.data) {
+        message = err.response?.data.error
+      }
+      enqueueSnackbar(message,  { variant: 'error' });
     } finally {
       setLoading(false)
     }
