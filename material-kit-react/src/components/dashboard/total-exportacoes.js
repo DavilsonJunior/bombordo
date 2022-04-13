@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography, Skeleton } from '@mui/material';
 import InsertChartIcon from '@mui/icons-material/InsertChartOutlined';
 
 export const TotalExportacoes = (props) => (
@@ -20,12 +20,20 @@ export const TotalExportacoes = (props) => (
           >
             TOTAL EXPORTAÇÕES
           </Typography>
-          <Typography
-            color="textPrimary"
-            variant="h4"
-          >
-            {props.totalExportacao}
-          </Typography>
+          {props.loading ? (
+              <Skeleton
+              variant="rectangular"
+              style={{borderRadius: 6}}
+              width={100}
+              height={50} />
+            ): (
+            <Typography
+              color="textPrimary"
+              variant="h4"
+            >
+              {props.totalExportacao}
+            </Typography>
+          )}
         </Grid>
         <Grid item>
           <Avatar

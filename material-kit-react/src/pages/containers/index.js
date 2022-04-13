@@ -20,7 +20,6 @@ const getContainers = async (filter = '', search = '') => {
     const response = await api.get(`/containers?filter=${filter}&search=${search}`)
     setContainers(response.data);
   } catch (err) {
-    enqueueSnackbar('Falha ao buscar os dados', { variant: 'error' })
   } finally {
     setLoading(false)
   }

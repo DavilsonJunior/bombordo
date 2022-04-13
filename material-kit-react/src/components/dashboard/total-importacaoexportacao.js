@@ -1,4 +1,4 @@
-import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Avatar, Card, CardContent, Grid, Typography, Skeleton } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 export const TotalExportacaoImportacao = (props) => (
@@ -17,12 +17,20 @@ export const TotalExportacaoImportacao = (props) => (
           >
             TOTAL IMPORTAÇÃO / EXPORTAÇÃO
           </Typography>
+          {props.loading ? (
+              <Skeleton
+              variant="rectangular"
+              style={{borderRadius: 6}}
+              width={100}
+              height={50} />
+            ): (
           <Typography
             color="textPrimary"
             variant="h4"
           >
-            {props.total.toFixed(2)}
+            {props.total ? props.total.toFixed(2) : 0}
           </Typography>
+          )}
         </Grid>
         <Grid item>
           <Avatar

@@ -52,12 +52,6 @@ const tipos = [
   },
 ];
 
-const top100Films = [
-  { cliente: 'The Shawshank Redemption', id: 1, numero_container: 'TEST1234567' },
-  { cliente: 'The Godfather', id: 2, numero_container: 'EESE7654321' },
-  { cliente: 'The Godfather: Part II', id: 3, numero_container: 'TEET1237654' }
-];
-
 const filter = createFilterOptions();
 
 const schema = yup.object({
@@ -74,9 +68,20 @@ export const MovementForm = (props) => {
   const [containers, setContainers] = useState([]);
 
   const getContainers = async () => {
-    const response = await api.get('/containers');
+    try {
+      const response = await api.get('/containers');
 
-    setContainers(response.data);
+      setContainers(response.data);
+    } catch (err) {
+      setContainers([
+        {
+          cliente: 'Nenhum container encontrado' ,
+          id: 0,
+          numero_container: '0'
+        },
+      ]);
+    }
+
   }
 
   useEffect(() => {
@@ -95,12 +100,16 @@ export const MovementForm = (props) => {
       await api.post('/movements', {
         tipo_de_movimentacao,
         data_inicio,
-        id_container: value.id,
+        id_container: value?.id || 0,
       });
       enqueueSnackbar('Movimentação cadastrada com sucesso!', { variant: 'success' });
       route.push('/movements');
     } catch(err) {
-      enqueueSnackbar('Falha ao cadastrar a movimentação',  { variant: 'error' });
+      let message = 'Falha ao cadastrar a movimentação';
+      if (err.response?.data) {
+        message = err.response?.data.error
+      }
+      enqueueSnackbar(message,  { variant: 'error' });
     } finally {
       setLoading(false)
     }

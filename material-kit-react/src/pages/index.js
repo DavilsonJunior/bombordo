@@ -33,12 +33,15 @@ const getReport = async () => {
     setTotalMovimentacao(response.data.totalMovimentacao);
     setTotalExportacao(response.data.totalExportacao);
     setTotalImportacao(response.data.totalImportacao);
-    setTotal(response.data.totalImportacao / response.data.totalExportacao);
+    if (response.data.totalExportacao > 0 && response.data.totalImportacao > 0) {
+      setTotal(response.data.totalImportacao / response.data.totalExportacao);
+    }
 
-    console.log(response.data.totalImportacao)
-    console.log(response.data.totalExportacao)
   } catch (err) {
-
+    setTotalMovimentacao(0);
+    setTotalExportacao(0);
+    setTotalImportacao(0);
+    setTotal(0);
   } finally {
     setLoading(false);
   }
@@ -86,6 +89,7 @@ return (
             xs={12}
           >
             <TotalMovements
+              loading={loading}
               totalMovimentacao={totalMovimentacao}
              />
           </Grid>
@@ -97,6 +101,7 @@ return (
             xs={12}
           >
             <TotalImportacoes
+              loading={loading}
               totalImportacao={totalImportacao}
             />
           </Grid>
@@ -108,6 +113,7 @@ return (
             xs={12}
           >
             <TotalExportacoes
+              loading={loading}
               totalExportacao={totalExportacao}
             />
           </Grid>
@@ -119,6 +125,7 @@ return (
             xs={12}
           >
             <TotalExportacaoImportacao
+              loading={loading}
               total={total}
               sx={{ height: '100%' }}
             />

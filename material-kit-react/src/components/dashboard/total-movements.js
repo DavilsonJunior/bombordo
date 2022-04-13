@@ -1,4 +1,4 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Avatar, Box, Card, CardContent, Grid, Typography, Skeleton } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoneyIcon from '@mui/icons-material/Money';
 
@@ -21,12 +21,22 @@ export const TotalMovements = (props) => (
           >
             Total Movimentação
           </Typography>
-          <Typography
-            color="textPrimary"
-            variant="h4"
-          >
-            {props.totalMovimentacao}
-          </Typography>
+          {props.loading ? (
+              <Skeleton
+              variant="rectangular"
+              style={{borderRadius: 6}}
+              width={100}
+              height={50} />
+            ): (
+              <Typography
+              color="textPrimary"
+              variant="h4"
+            >
+             {props.totalMovimentacao}
+            </Typography>
+            )
+            }
+
         </Grid>
         <Grid item>
           <Avatar
