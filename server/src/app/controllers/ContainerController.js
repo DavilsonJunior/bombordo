@@ -55,7 +55,7 @@ class ContainerController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' })
+      return res.status(400).json({ error: 'Falha na validação' })
     }
 
     const container = await Container.create(req.body);
@@ -73,7 +73,7 @@ class ContainerController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' })
+      return res.status(400).json({ error: 'Falha na validação' })
     }
 
     const { id } = req.params;
@@ -82,7 +82,7 @@ class ContainerController {
       where: { id }
     });
 
-    return res.status(201).json({ data: 'Container updated with success!' });
+    return res.status(201).json({ data: 'Container atualizado com sucesso!' });
   }
 
   async delete(req, res) {
@@ -92,7 +92,7 @@ class ContainerController {
       where: { id }
     });
 
-    return res.status(201).json({ data: 'Container removed with success!' });
+    return res.status(201).json({ data: 'Container removido com sucesso!' });
   }
 }
 

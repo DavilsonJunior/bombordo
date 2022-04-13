@@ -7,6 +7,12 @@ import Container from '../models/Container';
 
 class ReportContoller {
   async show(req, res) {
+    const containers = await Container.findAll();
+
+    if (containers.length === 0) {
+      return res.status(400).json({ error: 'Você ainda não possui nenhum container! adicione um primeiro.' })
+    }
+
     const [,  { rowCount, rows } ] = await Movement.sequelize.query(
       'SELECT containers.cliente, containers.numero_container, movements.tipo_de_movimentacao, movements.updated_at FROM movements INNER JOIN containers ON movements.id_container = containers.id',
       {
@@ -96,7 +102,7 @@ class ReportContoller {
               { text: 'Numero do container', style: 'columnsTitle' },
               { text: 'Ultima atualização', style: 'columnsTitle' },
             ],
-            ...body,
+            ...body || [],
           ],
         }
        },
@@ -109,19 +115,19 @@ class ReportContoller {
           body: [
             [
               { text: 'Total de Movimentações', style: 'columnsTitle' },
-              { text: totalMovimentacoes, style: 'lineTitle' }
+              { text: totalMovimentacoes || 0, style: 'lineTitle' }
             ],
             [
               { text: 'Total de Exportação', style: 'columnsTitle' },
-              { text: totalExportacao, style: 'lineTitle' }
+              { text: totalExportacao || 0, style: 'lineTitle' }
             ],
             [
               { text: 'Total de Importação', style: 'columnsTitle' },
-              { text: totalImportacao, style: 'lineTitle' }
+              { text: totalImportacao || 0, style: 'lineTitle' }
             ],
             [
               { text: 'Total Exportação / Importação', style: 'columnsTitle' },
-              { text: totalExportacaoPorImportacao, style: 'lineTitle' }
+              { text: totalExportacaoPorImportacao || 0, style: 'lineTitle' }
             ],
           ],
         }

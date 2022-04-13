@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
+import { startOfHour, parseISO, isBefore } from 'date-fns';
 
 import Movement from '../models/Movement';
 import Container from '../models/Container';
@@ -53,15 +54,25 @@ class MovementContoller {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' })
+      return res.status(400).json({ error: 'Faha na validação dos dados' })
     }
 
-    const { id_container }  = req.body;
+    const { id_container, data_inicio }  = req.body;
 
     const container = await Container.findOne({ where: { id: id_container } })
 
     if (!container) {
-      return res.status(401).json({ error: 'This container does not exist' })
+      return res.status(401).json({ error: 'Não existe nenhum container cadastrado!' })
+    }
+
+    /**
+     * check for past dates
+     */
+
+    const hourInitial = startOfHour(parseISO(data_inicio));
+
+    if (isBefore(hourInitial, new Date())) {
+      return res.status(400).json({ error: 'Horas no passado não são permitidas' });
     }
 
     const movement = await Movement.create(req.body);
@@ -76,7 +87,7 @@ class MovementContoller {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' })
+      return res.status(400).json({ error: 'Falha na validação' })
     }
 
     const { id } = req.params;
@@ -85,7 +96,7 @@ class MovementContoller {
       where: { id }
     });
 
-    return res.status(201).json({ data: 'Container updated with success!' });
+    return res.status(201).json({ data: 'Movimentação atualizada com sucesso!' });
   }
 
   async delete(req, res) {
@@ -95,7 +106,7 @@ class MovementContoller {
       where: { id }
     });
 
-    return res.status(201).json({ data: 'Container removed with success!' });
+    return res.status(201).json({ data: 'Movimentação removida com sucesso!' });
   }
 }
 
