@@ -58,6 +58,16 @@ class ContainerController {
       return res.status(400).json({ error: 'Falha na validação' })
     }
 
+    const { numero_container } = req.body
+
+    const containerExist = await Container.findOne({
+      where: { numero_container }
+    });
+
+    if (containerExist) {
+      return res.status(401).json({ error: 'Esse container já está cadastrado! tente um novo' })
+    }
+
     const container = await Container.create(req.body);
 
     return res.status(201).json(container);
